@@ -96,6 +96,7 @@ export const createOrder = async (req, res, next) => {
 
         await session.commitTransaction()
 
+
         // Populate order items
         const populatedOrder = await Order.findById(order[0]._id)
             .populate('items.product', 'name imageUrl price')
