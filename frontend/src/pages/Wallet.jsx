@@ -67,7 +67,7 @@ const Wallet = () => {
                         <Button
                             onClick={() => setShowAddMoney(true)}
                             variant="primary"
-                            className="bg-white text-primary-700 hover:bg-gray-100"
+                            className="bg-primary-700 text-white hover:bg-gray-100"
                             icon={<FiPlus />}
                         >
                             Add Money

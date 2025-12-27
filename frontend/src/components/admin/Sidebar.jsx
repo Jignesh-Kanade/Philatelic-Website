@@ -7,7 +7,10 @@ import {
     FiUsers,
     FiSettings,
     FiHome,
-    FiX
+    FiX,
+    FiMessageCircle,
+    FiCalendar,
+    FiHeart
 } from 'react-icons/fi'
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -17,6 +20,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         { path: '/admin/dashboard', icon: FiGrid, label: 'Dashboard' },
         { path: '/admin/products', icon: FiPackage, label: 'Manage Stamps' },
         { path: '/admin/orders', icon: FiShoppingBag, label: 'Orders' },
+        { path: '/admin/forum', icon: FiMessageCircle, label: 'Forum' },
+        { path: '/admin/events', icon: FiCalendar, label: 'Events' },
+        { path: '/admin/interests', icon: FiHeart, label: 'Interest Stats' },
         { path: '/admin/users', icon: FiUsers, label: 'Users' },
         { path: '/admin/settings', icon: FiSettings, label: 'Settings' },
     ]
@@ -78,8 +84,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                                     to={item.path}
                                     onClick={onClose}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.path)
-                                            ? 'bg-primary-50 text-primary-700 font-semibold'
-                                            : 'text-gray-600 hover:bg-gray-100'
+                                        ? 'bg-primary-50 text-primary-700 font-semibold'
+                                        : 'text-gray-600 hover:bg-gray-100'
                                         }`}
                                 >
                                     <Icon className="w-5 h-5" />

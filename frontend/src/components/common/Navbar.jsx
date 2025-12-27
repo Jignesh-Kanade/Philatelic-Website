@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useCart } from '../../hooks/useCart'
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiLogOut, FiGrid } from 'react-icons/fi'
+import { FiMenu, FiHeart, FiX, FiShoppingCart, FiUser, FiLogOut, FiGrid } from 'react-icons/fi'
 import { RiAdminLine } from 'react-icons/ri'
 
 const Navbar = () => {
@@ -38,6 +38,12 @@ const Navbar = () => {
                         </Link>
                         <Link to="/products" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
                             Stamps
+                        </Link>
+                        <Link to="/forum" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                            Forum
+                        </Link>
+                        <Link to="/events" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                            Events
                         </Link>
                         <Link to="/about" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
                             About
@@ -101,6 +107,14 @@ const Navbar = () => {
                                         >
                                             <span>💰</span>
                                             <span>NPDA Wallet</span>
+                                        </Link>
+                                        <Link
+                                            to="/interests"
+                                            className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <FiHeart className="w-4 h-4" />
+                                            <span>My Interests</span>
                                         </Link>
                                         {isAdmin && (
                                             <>
@@ -166,6 +180,20 @@ const Navbar = () => {
                                 Stamps
                             </Link>
                             <Link
+                                to="/forum"
+                                className="text-gray-700 hover:text-primary-600 font-medium px-4 py-2 hover:bg-gray-50 rounded"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                Forum
+                            </Link>
+                            <Link
+                                to="/events"
+                                className="text-gray-700 hover:text-primary-600 font-medium px-4 py-2 hover:bg-gray-50 rounded"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                Events
+                            </Link>
+                            <Link
                                 to="/about"
                                 className="text-gray-700 hover:text-primary-600 font-medium px-4 py-2 hover:bg-gray-50 rounded"
                                 onClick={() => setIsOpen(false)}
@@ -215,6 +243,13 @@ const Navbar = () => {
                                         onClick={() => setIsOpen(false)}
                                     >
                                         NPDA Wallet
+                                    </Link>
+                                    <Link
+                                        to="/interests"
+                                        className="text-gray-700 hover:text-primary-600 font-medium px-4 py-2 hover:bg-gray-50 rounded"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        My Interests
                                     </Link>
                                     {isAdmin && (
                                         <Link

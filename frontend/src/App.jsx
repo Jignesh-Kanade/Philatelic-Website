@@ -24,6 +24,14 @@ import AddProduct from './pages/admin/AddProduct'
 import Settings from './pages/admin/Settings'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { checkAuth } from './redux/slices/authSlice'
+import Forum from './pages/Forum'
+import ForumPostDetail from './pages/ForumPostDetail'
+import Events from './pages/Event'
+import EventDetail from './pages/EventDetail'
+import Interests from './pages/Interests'
+import ManageForum from './pages/admin/ManageForum'
+import ManageEvents from './pages/admin/ManageEvents'
+import InterestStats from './pages/admin/InterestStats'
 
 function App() {
   const dispatch = useDispatch()
@@ -46,6 +54,13 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          {/* Forum Routes */}
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/:id" element={<ForumPostDetail />} />
+
+          {/* Events Routes */}
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
 
           {/* Auth Routes */}
           <Route
@@ -55,6 +70,15 @@ function App() {
           <Route
             path="/register"
             element={isAuthenticated ? <Navigate to="/" /> : <Register />}
+          />
+          {/* Interests Route (Protected) */}
+          <Route
+            path="/interests"
+            element={
+              <ProtectedRoute>
+                <Interests />
+              </ProtectedRoute>
+            }
           />
 
           {/* Protected User Routes */}
@@ -145,6 +169,30 @@ function App() {
             element={
               <ProtectedRoute adminOnly>
                 <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/forum"
+            element={
+              <ProtectedRoute adminOnly>
+                <ManageForum />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/events"
+            element={
+              <ProtectedRoute adminOnly>
+                <ManageEvents />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/interests"
+            element={
+              <ProtectedRoute adminOnly>
+                <InterestStats />
               </ProtectedRoute>
             }
           />
