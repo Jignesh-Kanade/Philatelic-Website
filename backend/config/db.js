@@ -24,8 +24,8 @@ const createAdminUser = async () => {
         if (!adminExists) {
             const admin = await User.create({
                 name: 'Admin User',
-                email: process.env.ADMIN_EMAIL || 'admin@philately.com',
-                password: process.env.ADMIN_PASSWORD || 'Admin@123',
+                email: process.env.ADMIN_EMAIL,
+                password: process.env.ADMIN_PASSWORD,
                 phone: '9999999999',
                 role: 'admin',
                 isActive: true
