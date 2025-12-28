@@ -136,7 +136,6 @@ This project demonstrates:
 - Database design and optimization
 - Responsive UI/UX development
 - Version control with Git
-
 ---
 
 ## 🙏 Acknowledgments
