@@ -139,12 +139,6 @@ This project demonstrates:
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 🙏 Acknowledgments
 
 - India Post Philately Bureau for inspiration
