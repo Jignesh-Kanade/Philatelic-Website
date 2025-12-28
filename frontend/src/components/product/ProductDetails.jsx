@@ -5,6 +5,8 @@ import { useCart } from '../../hooks/useCart'
 import { formatCurrency, formatDate } from '../../utils/helpers'
 import { FiShoppingCart, FiHeart, FiShare2, FiPackage, FiCheckCircle } from 'react-icons/fi'
 import Button from '../common/Button'
+import { API_URL } from '../../utils/constants'
+import { BACKEND_URL } from '../../utils/constants'
 
 const ProductDetails = ({ product }) => {
     const { isAuthenticated } = useAuth()
@@ -12,6 +14,10 @@ const ProductDetails = ({ product }) => {
     const navigate = useNavigate()
     const [selectedQuantity, setSelectedQuantity] = useState(1)
     const cartQuantity = getItemQuantity(product._id)
+
+    // mew content
+    const [interestLoading, setInterestLoading] = useState(false)
+
 
     const handleAddToCart = () => {
         if (!isAuthenticated) {
@@ -31,15 +37,32 @@ const ProductDetails = ({ product }) => {
         handleAddToCart()
         navigate('/cart')
     }
+    //new content
+    const handleRegisterInterest = async () => {
+        if (!isAuthenticated) {
+            navigate('/login')
+            return
+        }
+
+        setInterestLoading(true)
+        try {
+            await dispatch(registerInterest({ productId: product._id, priority: 'medium' }))
+            alert('Interest registered successfully! Check "My Interests" page.')
+        } catch (error) {
+            alert('Failed to register interest')
+        } finally {
+            setInterestLoading(false)
+        }
+    }
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Image Section */}
             <div className="space-y-4">
                 <div className="bg-gray-100 rounded-2xl overflow-hidden aspect-square">
-                    {product.imageUrl ? (
+                    {product.image ? (
                         <img
-                            src={product.imageUrl}
+                            src={`${BACKEND_URL}${product.image}`}
                             alt={product.name}
                             className="w-full h-full object-cover"
                         />
@@ -207,9 +230,25 @@ const ProductDetails = ({ product }) => {
                         </Button>
                     )}
                     {product.stock === 0 && (
-                        <Button variant="secondary" size="large" fullWidth disabled>
-                            Out of Stock
-                        </Button>
+                        <>
+                            <Button variant="secondary" size="large" fullWidth disabled>
+                                Out of Stock
+                            </Button>
+
+                            {/* new content */}
+                            {isAuthenticated && (
+                                <Button
+                                    onClick={handleRegisterInterest}
+                                    variant="outline"
+                                    size="large"
+                                    fullWidth
+                                    disabled={interestLoading}
+                                    icon={<FiHeart />}
+                                >
+                                    {interestLoading ? 'Registering...' : 'Register Interest'}
+                                </Button>
+                            )}
+                        </>
                     )}
                 </div>
 

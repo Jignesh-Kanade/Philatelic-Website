@@ -144,7 +144,12 @@ export const getProductsByCategory = async (req, res, next) => {
 // @access  Private/Admin
 export const createProduct = async (req, res, next) => {
     try {
-        const product = await Product.create(req.body)
+        const productData = {
+            ...req.body,
+            image: req.file ? `/uploads/${req.file.filename}` : null
+        }
+
+        const product = await Product.create(productData)
 
         res.status(201).json({
             success: true,

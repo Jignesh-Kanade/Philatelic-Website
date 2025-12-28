@@ -1,4 +1,6 @@
 import api from './api'
+import axios from 'axios'
+import { API_URL } from '../utils/constants'
 
 export const getAllProducts = async (params = {}) => {
     const queryParams = new URLSearchParams(params).toString()
@@ -16,9 +18,10 @@ export const searchProducts = async (query) => {
     return response
 }
 
-export const createProduct = async (productData) => {
-    const response = await api.post('/products', productData)
-    return response
+export const createProduct = (formData) => {
+    return axios.post(`${API_URL}/products`, formData, {
+        withCredentials: true
+    })
 }
 
 export const updateProduct = async (id, productData) => {

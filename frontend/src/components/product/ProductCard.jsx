@@ -5,6 +5,8 @@ import { useCart } from '../../hooks/useCart'
 import { FiShoppingCart, FiEye } from 'react-icons/fi'
 import { formatCurrency } from '../../utils/helpers'
 import Button from '../common/Button'
+import { API_URL } from '../../utils/constants'
+import { BACKEND_URL } from '../../utils/constants'
 
 const ProductCard = ({ product }) => {
     const { isAuthenticated } = useAuth()
@@ -23,9 +25,9 @@ const ProductCard = ({ product }) => {
             <div className="card p-0 h-full flex flex-col">
                 {/* Image */}
                 <div className="relative overflow-hidden bg-gray-100 rounded-t-xl aspect-square">
-                    {product.imageUrl ? (
+                    {product.image ? (
                         <img
-                            src={product.imageUrl}
+                            src={`${BACKEND_URL}${product.image}`}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         />

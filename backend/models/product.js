@@ -41,9 +41,9 @@ const productSchema = new mongoose.Schema({
         min: [0, 'Stock cannot be negative'],
         default: 0
     },
-    imageUrl: {
+    image: {
         type: String,
-        default: ''
+        required: true
     },
     releaseDate: {
         type: Date

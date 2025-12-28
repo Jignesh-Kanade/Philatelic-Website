@@ -1,4 +1,6 @@
 import express from 'express'
+import upload from '../middleware/upload.js'
+
 import {
     getAllProducts,
     getProductById,
@@ -23,7 +25,7 @@ router.get('/:id', getProductById)
 
 // Admin routes
 router.use(protect, admin)
-router.post('/', createProduct)
+router.post('/', upload.single('image'), createProduct)
 router.put('/:id', updateProduct)
 router.delete('/:id', deleteProduct)
 

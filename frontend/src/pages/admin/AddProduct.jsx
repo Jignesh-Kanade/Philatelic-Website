@@ -11,6 +11,7 @@ const AddProduct = () => {
     const navigate = useNavigate()
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [image, setImage] = useState(null)
     const [formData, setFormData] = useState({
         name: '',
         category: '',
@@ -39,6 +40,10 @@ const AddProduct = () => {
         }
     }
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0])
+    }
+
     const validateForm = () => {
         const newErrors = {}
         if (!formData.name.trim()) newErrors.name = 'Stamp name is required'
@@ -58,6 +63,11 @@ const AddProduct = () => {
             return
         }
 
+        if (!image) {
+            alert('Please select an image')
+            return
+        }
+
         try {
             setLoading(true)
             const productData = {
@@ -67,7 +77,19 @@ const AddProduct = () => {
                 stock: parseInt(formData.stock)
             }
 
-            await createProduct(productData)
+            const form = new FormData()
+
+            Object.entries(productData).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    form.append(key, value)
+                }
+            })
+
+            // ✅ APPEND IMAGE FILE
+            form.append('image', image)
+
+            // ✅ SEND TO BACKEND
+            await createProduct(form)
             navigate('/admin/products')
         } catch (error) {
             console.error('Error creating product:', error)
@@ -231,16 +253,16 @@ const AddProduct = () => {
                                         />
 
                                         <div className="md:col-span-2">
-                                            <Input
-                                                label="Image URL"
-                                                name="imageUrl"
-                                                value={formData.imageUrl}
-                                                onChange={handleChange}
-                                                placeholder="https://example.com/stamp-image.jpg"
+                                            <label className="block text-gray-700 font-medium mb-2">
+                                                Stamp Image <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                className="input-field"
+                                                required
                                             />
-                                            <p className="mt-1 text-sm text-gray-500">
-                                                Note: In production, this would be a file upload. For now, provide image URL.
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
