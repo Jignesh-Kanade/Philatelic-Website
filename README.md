@@ -6,7 +6,7 @@ The Digital Philately Platform addresses the fragmentation in India's stamp coll
 
 **Project Type**: College Final Year Project 
 **Domain**: Web Development, E-commerce, Community Platform  
-**Development Period**: 2024
+**Development Period**: 2025
 
 ---
 
