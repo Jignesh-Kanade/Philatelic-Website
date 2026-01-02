@@ -103,6 +103,36 @@ The Digital Philately Platform addresses the fragmentation in India's stamp coll
 
 ---
 
+## 🔐 Environment Variables
+
+This project uses environment variables for configuration.  
+Create a `.env` file inside the **backend** directory and add the following:
+
+```env
+# Server Configuration
+NODE_ENV=development
+PORT=5000
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/philately-db
+
+# Razorpay Configuration
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key
+JWT_EXPIRE=7d
+
+# CORS
+CLIENT_URL=http://localhost:3000
+
+# Admin Credentials (First-Time Setup Only)
+ADMIN_EMAIL=admin@philatelic.com
+ADMIN_PASSWORD=Admin@123
+
+---
+
 ## 🧪 Testing Credentials
 
 **Admin Account:**  
