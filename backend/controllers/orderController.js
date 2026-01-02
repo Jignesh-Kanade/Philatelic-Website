@@ -7,15 +7,16 @@ import mongoose from 'mongoose'
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-// @desc    Create new order (Without transactions - for MongoDB Atlas Free Tier)
-// @route   POST /api/orders
-// @access  Private
 export const createOrder = async (req, res, next) => {
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
     try {
         const { items, shippingAddress, totalAmount } = req.body
 
         // Validate items
         if (!items || items.length === 0) {
+            await session.abortTransaction()
             return res.status(400).json({
                 success: false,
                 message: 'No items in order'
@@ -25,6 +26,7 @@ export const createOrder = async (req, res, next) => {
         // Validate shipping address
         if (!shippingAddress || !shippingAddress.street || !shippingAddress.city ||
             !shippingAddress.state || !shippingAddress.pincode) {
+            await session.abortTransaction()
             return res.status(400).json({
                 success: false,
                 message: 'Please provide complete shipping address'
@@ -32,20 +34,22 @@ export const createOrder = async (req, res, next) => {
         }
 
         // Check wallet balance
-        const wallet = await Wallet.findOne({ user: req.user._id })
+        const wallet = await Wallet.findOne({ user: req.user._id }).session(session)
 
         if (!wallet || wallet.balance < totalAmount) {
+            await session.abortTransaction()
             return res.status(400).json({
                 success: false,
-                message: 'Insufficient wallet balance. Please add money to your NPDA wallet.'
+                message: 'Insufficient wallet balance'
             })
         }
 
         // Verify products and stock
         for (const item of items) {
-            const product = await Product.findById(item.product)
+            const product = await Product.findById(item.product).session(session)
 
             if (!product) {
+                await session.abortTransaction()
                 return res.status(404).json({
                     success: false,
                     message: `Product not found: ${item.product}`
@@ -53,27 +57,24 @@ export const createOrder = async (req, res, next) => {
             }
 
             if (product.stock < item.quantity) {
+                await session.abortTransaction()
                 return res.status(400).json({
                     success: false,
                     message: `Insufficient stock for ${product.name}`
                 })
             }
-        }
 
-        // Update product stock
-        for (const item of items) {
-            await Product.findByIdAndUpdate(
-                item.product,
-                { $inc: { stock: -item.quantity } }
-            )
+            // Update stock
+            product.stock -= item.quantity
+            await product.save({ session })
         }
 
         // Deduct from wallet
         wallet.balance -= totalAmount
-        await wallet.save()
+        await wallet.save({ session })
 
         // Create order
-        const order = await Order.create({
+        const order = await Order.create([{
             user: req.user._id,
             items,
             shippingAddress,
@@ -81,20 +82,22 @@ export const createOrder = async (req, res, next) => {
             paymentMethod: 'wallet',
             paymentStatus: 'completed',
             status: 'pending'
-        })
+        }], { session })
 
-        // Create transaction record
-        await Transaction.create({
+        // Create transaction
+        await Transaction.create([{
             user: req.user._id,
             type: 'debit',
             amount: totalAmount,
-            description: `Payment for order ${order.orderId}`,
+            description: `Payment for order ${order[0].orderId}`,
             balanceAfter: wallet.balance,
-            order: order._id
-        })
+            order: order[0]._id
+        }], { session })
+
+        await session.commitTransaction()
 
         // Populate order items
-        const populatedOrder = await Order.findById(order._id)
+        const populatedOrder = await Order.findById(order[0]._id)
             .populate('items.product', 'name imageUrl price')
             .populate('user', 'name email')
 
@@ -104,13 +107,13 @@ export const createOrder = async (req, res, next) => {
             order: populatedOrder
         })
     } catch (error) {
-        console.error('Order creation error:', error)
+        await session.abortTransaction()
         next(error)
+    } finally {
+        session.endSession()
     }
 }
-// @desc    Get user orders
-// @route   GET /api/orders/my-orders
-// @access  Private
+
 // @desc    Get user orders
 // @route   GET /api/orders/my-orders
 // @access  Private
@@ -118,12 +121,7 @@ export const getUserOrders = async (req, res, next) => {
     try {
         const orders = await Order.find({ user: req.user._id })
             .sort({ createdAt: -1 })
-            .populate({
-                path: 'items.product',
-                select: 'name imageUrl price category',
-                model: 'Product'  // ← Explicitly specify model name
-            })
-            .lean()  // ← Convert to plain JavaScript objects
+            .populate('items.product', 'name imageUrl price category')
 
         res.status(200).json({
             success: true,
@@ -132,11 +130,9 @@ export const getUserOrders = async (req, res, next) => {
             total: orders.length
         })
     } catch (error) {
-        console.error('Get orders error:', error)
         next(error)
     }
 }
-
 
 // @desc    Get single order
 // @route   GET /api/orders/:id
@@ -174,9 +170,6 @@ export const getOrderById = async (req, res, next) => {
 // @desc    Get all orders (Admin)
 // @route   GET /api/orders
 // @access  Private/Admin
-// @desc    Get all orders (Admin)
-// @route   GET /api/orders
-// @access  Private/Admin
 export const getAllOrders = async (req, res, next) => {
     try {
         const { status } = req.query
@@ -188,13 +181,8 @@ export const getAllOrders = async (req, res, next) => {
 
         const orders = await Order.find(query)
             .sort({ createdAt: -1 })
-            .populate({
-                path: 'items.product',
-                select: 'name imageUrl price',
-                model: 'Product'
-            })
+            .populate('items.product', 'name imageUrl price')
             .populate('user', 'name email phone')
-            .lean()
 
         res.status(200).json({
             success: true,
@@ -203,11 +191,9 @@ export const getAllOrders = async (req, res, next) => {
             total: orders.length
         })
     } catch (error) {
-        console.error('Get all orders error:', error)
         next(error)
     }
 }
-
 
 // @desc    Update order status (Admin)
 // @route   PUT /api/orders/:id/status

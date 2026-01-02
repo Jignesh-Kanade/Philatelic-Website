@@ -1,11 +1,21 @@
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getWalletBalance, addMoney, getTransactions } from '../../services/userService'
+import {
+    getWalletBalance,
+    getTransactions,
+    createRazorpayOrder,
+    verifyPayment,
+    addMoneyDemo,
+    checkPaymentGatewayStatus
+} from '../../services/walletService'
 
 const initialState = {
     balance: 0,
     transactions: [],
     loading: false,
     error: null,
+    isPaymentGatewayConfigured: false,
+    paymentLoading: false
 }
 
 // Async thunks
@@ -17,18 +27,6 @@ export const fetchWalletBalance = createAsyncThunk(
             return response
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch balance')
-        }
-    }
-)
-
-export const addMoneyToWallet = createAsyncThunk(
-    'wallet/addMoney',
-    async (amount, { rejectWithValue }) => {
-        try {
-            const response = await addMoney(amount)
-            return response
-        } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to add money')
         }
     }
 )
@@ -45,6 +43,54 @@ export const fetchTransactions = createAsyncThunk(
     }
 )
 
+export const checkPaymentStatus = createAsyncThunk(
+    'wallet/checkPaymentStatus',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await checkPaymentGatewayStatus()
+            return response
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to check payment status')
+        }
+    }
+)
+
+export const createPaymentOrder = createAsyncThunk(
+    'wallet/createOrder',
+    async (amount, { rejectWithValue }) => {
+        try {
+            const response = await createRazorpayOrder(amount)
+            return response
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to create order')
+        }
+    }
+)
+
+export const verifyAndAddMoney = createAsyncThunk(
+    'wallet/verifyPayment',
+    async (paymentData, { rejectWithValue }) => {
+        try {
+            const response = await verifyPayment(paymentData)
+            return response
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Payment verification failed')
+        }
+    }
+)
+
+export const addMoneyToWallet = createAsyncThunk(
+    'wallet/addMoney',
+    async (amount, { rejectWithValue }) => {
+        try {
+            const response = await addMoneyDemo(amount)
+            return response
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to add money')
+        }
+    }
+)
+
 const walletSlice = createSlice({
     name: 'wallet',
     initialState,
@@ -55,6 +101,9 @@ const walletSlice = createSlice({
         updateBalance: (state, action) => {
             state.balance = action.payload
         },
+        setPaymentLoading: (state, action) => {
+            state.paymentLoading = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -70,7 +119,23 @@ const walletSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-            // Add Money
+            // Check Payment Status
+            .addCase(checkPaymentStatus.fulfilled, (state, action) => {
+                state.isPaymentGatewayConfigured = action.payload.isConfigured
+            })
+            // Verify and Add Money
+            .addCase(verifyAndAddMoney.pending, (state) => {
+                state.paymentLoading = true
+            })
+            .addCase(verifyAndAddMoney.fulfilled, (state, action) => {
+                state.paymentLoading = false
+                state.balance = action.payload.balance
+            })
+            .addCase(verifyAndAddMoney.rejected, (state, action) => {
+                state.paymentLoading = false
+                state.error = action.payload
+            })
+            // Add Money (Demo)
             .addCase(addMoneyToWallet.pending, (state) => {
                 state.loading = true
             })
@@ -94,8 +159,8 @@ const walletSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-    },
+    }
 })
 
-export const { clearError, updateBalance } = walletSlice.actions
+export const { clearError, updateBalance, setPaymentLoading } = walletSlice.actions
 export default walletSlice.reducer
