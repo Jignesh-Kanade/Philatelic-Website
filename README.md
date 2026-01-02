@@ -130,7 +130,7 @@ CLIENT_URL=http://localhost:3000
 # Admin Credentials (First-Time Setup Only)
 ADMIN_EMAIL=admin@philatelic.com
 ADMIN_PASSWORD=Admin@123
-
+```
 ---
 
 ## 🧪 Testing Credentials
