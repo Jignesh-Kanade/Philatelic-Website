@@ -64,7 +64,7 @@ const ProductDetails = ({ product }) => {
                         <img
                             src={`${BACKEND_URL}${product.image}`}
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                            className="w-90vw h-full object-cover"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center">
