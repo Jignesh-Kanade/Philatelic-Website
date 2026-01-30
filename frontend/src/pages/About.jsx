@@ -31,10 +31,10 @@ const About = () => {
     ]
 
     const milestones = [
-        { year: '2024', title: 'Platform Launch', description: 'Launched India\'s first unified digital philately platform' },
-        { year: '2024', title: '500+ Stamps', description: 'Curated collection of rare and commemorative stamps' },
-        { year: '2024', title: '2000+ Users', description: 'Growing community of passionate collectors' },
-        { year: '2024', title: 'NPDA Integration', description: 'Secure wallet system for seamless transactions' }
+        { year: '2025', title: 'Platform Launch', description: 'Launched India\'s first unified digital philately platform' },
+        { year: '2025', title: '500+ Stamps', description: 'Curated collection of rare and commemorative stamps' },
+        { year: '2025', title: '2000+ Users', description: 'Growing community of passionate collectors' },
+        { year: '2025', title: 'NPDA Integration', description: 'Secure wallet system for seamless transactions' }
     ]
 
     return (
