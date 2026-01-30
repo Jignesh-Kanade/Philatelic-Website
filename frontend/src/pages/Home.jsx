@@ -36,7 +36,7 @@ const Home = () => {
                                 Secure NPDA Wallet
                             </h3>
                             <p className="text-gray-600">
-                                Government-backed digital wallet for safe and hassle-free
+                                Government-integrated didgital wallet for safe and hassle-free
                                 transactions. Add money once and buy multiple stamps seamlessly.
                             </p>
                         </div>
@@ -47,11 +47,10 @@ const Home = () => {
                                 <span className="text-3xl">📦</span>
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">
-                                Fast Delivery
+                                Safe Rewording
                             </h3>
                             <p className="text-gray-600">
-                                Track your orders in real-time. Physical stamps delivered to
-                                your doorstep within 5–7 business days via India Post.
+                                Designed to support order tracking and delivery via India post
                             </p>
                         </div>
 

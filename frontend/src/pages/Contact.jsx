@@ -38,13 +38,13 @@ const Contact = () => {
         {
             icon: FiPhone,
             title: 'Phone',
-            info: '+91-11-2334-5678\n+91-11-2334-5679',
+            info: '+91-xx-xxxx-xxxx\n+91-xx-xxxx-xxxx',
             color: 'bg-green-500'
         },
         {
             icon: FiMail,
             title: 'Email',
-            info: 'support@philatelyindia.gov.in\ninfo@philatelyindia.gov.in',
+            info: 'support@philatelyindiademo\ninfo@philatelyindia.demo',
             color: 'bg-purple-500'
         }
     ]

@@ -89,20 +89,20 @@ const About = () => {
                             <div className="relative bg-white rounded-3xl shadow-2xl p-8">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="text-center">
-                                        <div className="text-4xl font-bold text-primary-600 mb-2">500+</div>
-                                        <div className="text-gray-600">Rare Stamps</div>
+                                        <div className="text-4xl font-bold text-primary-600 mb-2">Curated stamp</div>
+                                        <div className="text-gray-600">collection</div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-4xl font-bold text-primary-600 mb-2">2000+</div>
-                                        <div className="text-gray-600">Active Users</div>
+                                        <div className="text-4xl font-bold text-primary-600 mb-2">Growing user</div>
+                                        <div className="text-gray-600">community</div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-4xl font-bold text-primary-600 mb-2">1000+</div>
-                                        <div className="text-gray-600">Orders Delivered</div>
+                                        <div className="text-4xl font-bold text-primary-600 mb-2">Order Management</div>
+                                        <div className="text-gray-600">System</div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-4xl font-bold text-primary-600 mb-2">100%</div>
-                                        <div className="text-gray-600">Authentic</div>
+                                        <div className="text-4xl font-bold text-primary-600 mb-2">Verified</div>
+                                        <div className="text-gray-600">Sources</div>
                                     </div>
                                 </div>
                             </div>
