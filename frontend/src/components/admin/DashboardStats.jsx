@@ -1,5 +1,6 @@
 import React from 'react'
-import { FiUsers, FiPackage, FiShoppingBag, FiDollarSign, FiTrendingUp } from 'react-icons/fi'
+import { FiUsers, FiPackage, FiShoppingBag, FiTrendingUp } from 'react-icons/fi'
+import { FaRupeeSign } from 'react-icons/fa';
 import { formatCurrency } from '../../utils/helpers'
 
 const DashboardStats = ({ stats }) => {
@@ -7,7 +8,7 @@ const DashboardStats = ({ stats }) => {
         {
             title: 'Total Revenue',
             value: formatCurrency(stats?.totalRevenue || 0),
-            icon: FiDollarSign,
+            icon: FaRupeeSign,
             color: 'bg-green-500',
             change: '+12.5%',
             changeType: 'increase'
